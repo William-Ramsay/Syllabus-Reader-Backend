@@ -1,0 +1,20 @@
+<Limit POST PUT PATCH DELETE GET>
+  Require all granted
+</Limit>
+
+# Enable Apache Rewrite Engine
+RewriteEngine On
+
+# Preserve Authorization Header
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+# Set the base directory for rewrite to the folder your API is in
+RewriteBase /syllabus/api
+
+# Deliver the folder or file directly if it exists
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Push every request to index.php
+RewriteRule ^ index.php [QSA,L]
